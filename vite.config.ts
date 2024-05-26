@@ -4,6 +4,8 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
+  base: "/shadcn-tutorial/",
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
