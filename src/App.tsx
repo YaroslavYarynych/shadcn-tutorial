@@ -1,37 +1,49 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import { Button } from "@/components/ui/button";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { DataTable } from "./components/shared/data-table";
+import { columns } from "./components/shared/columns";
+import { IProduct } from "./utils/interfaces";
+
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const queryClient = useQueryClient();
+  const { data, isLoading, error, isSuccess } = useQuery({
+    queryKey: ["all-products"],
+    queryFn: () =>
+      fetch("https://dummyjson.com/products?limit=0").then((res) => res.json()),
+  });
+
+  console.log(data);
+
+  const { mutate } = useMutation({
+    mutationFn: (newPost: IProduct) =>
+      fetch("https://dummyjson.com/products/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newPost),
+      }).then((res) => res.json()),
+    onSuccess: (newProduct: IProduct) => {
+      // відправляємо запит після успішнього додаваня
+      // queryClient.invalidateQueries({ queryKey: ["all-products"] });
+
+      // вручну додали в кеш дані
+      queryClient.setQueryData(["all-products"], (oldProducts: IProduct[]) => [
+        ...oldProducts,
+        newProduct,
+      ]);
+    },
+  });
 
   return (
-    <>
-      <Button>Hi</Button>
-
-      <div className="flex flex-col justify-center items-center">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="container">
+      <h1 className="text-3xl font-bold	text-left pb-[20px]">All Products</h1>
+      {isLoading && <h1>LOADING</h1>}
+      {isSuccess && (
+        <>
+          <DataTable columns={columns} data={data.products} />
+        </>
+      )}
+    </div>
   );
 }
 
