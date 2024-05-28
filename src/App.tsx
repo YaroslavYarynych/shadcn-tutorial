@@ -7,7 +7,7 @@ import "./App.css";
 
 function App() {
   const queryClient = useQueryClient();
-  const { data, isLoading, error, isSuccess } = useQuery({
+  const { data, isLoading, isSuccess } = useQuery({
     queryKey: ["all-products"],
     queryFn: () =>
       fetch("https://dummyjson.com/products?limit=0").then((res) => res.json()),
@@ -15,7 +15,7 @@ function App() {
 
   console.log(data);
 
-  const { mutate } = useMutation({
+  const {} = useMutation({
     mutationFn: (newPost: IProduct) =>
       fetch("https://dummyjson.com/products/add", {
         method: "POST",
