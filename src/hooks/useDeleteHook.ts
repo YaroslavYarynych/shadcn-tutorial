@@ -4,14 +4,14 @@ import axios from "axios";
 const useDeleteHook = () => {
   const queryClient = useQueryClient();
 
-  const deleteFn = async (productId: number) => {
+  const deleteFn = async (productId: number | string) => {
     const { data } = await axios.delete(
       `https://dummyjson.com/products/${productId}`
     );
     return data;
   };
 
-  return useMutation<number, unknown, number>({
+  return useMutation<number | string, unknown, number | string>({
     mutationFn: deleteFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["all-products"] });

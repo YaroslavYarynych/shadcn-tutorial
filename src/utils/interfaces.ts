@@ -1,5 +1,7 @@
+import { ColumnDef } from "@tanstack/react-table";
+
 export interface IProduct {
-  id: number;
+  id: number | string;
   title: string;
   description: string;
   category: string;
@@ -40,4 +42,10 @@ interface IMeta {
   updatedAt: string;
   barcode: string;
   qrCode: string;
+}
+
+export interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  handleOpenModal: () => void;
 }

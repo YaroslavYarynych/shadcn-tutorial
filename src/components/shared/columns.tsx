@@ -108,7 +108,6 @@ export const columns: ColumnDef<IProduct>[] = [
     id: "actions",
     cell: ({ row }) => {
       const payment = row.original;
-      console.log(payment);
       const { mutate: mutateDelete } = useDeleteHook();
       return (
         <DropdownMenu>

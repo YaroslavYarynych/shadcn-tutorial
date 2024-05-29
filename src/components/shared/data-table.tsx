@@ -1,5 +1,4 @@
 import {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   flexRender,
@@ -21,18 +20,17 @@ import {
 import { DataTablePagination } from "./table-pagination";
 import { TableToolbar } from "./table-toolbar";
 import { useState } from "react";
-
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-}
+import { Button } from "../ui/button";
+import { DataTableProps } from "@/utils/interfaces";
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  handleOpenModal,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
   const table = useReactTable({
     data,
     columns,
@@ -51,7 +49,10 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <TableToolbar table={table} />
+      <section className="flex w-full items-center justify-between">
+        <TableToolbar table={table} />
+        <Button onClick={handleOpenModal}>Add product</Button>
+      </section>
 
       <div className="rounded-md border">
         <Table>
