@@ -16,7 +16,9 @@ Currently, two official plugins are available:
 - ShadcnUI
 - React query
 - TanStack table
+- React hook form
 - Tailwind CSS
+- axios
 
 ## Setup
 
